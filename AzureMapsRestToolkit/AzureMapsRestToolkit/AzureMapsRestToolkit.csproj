@@ -13,6 +13,7 @@
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
     <RootNamespace>AzureMapsToolkit</RootNamespace>
     <FileVersion>6.0.0.0</FileVersion>
+    <PackageId>RtChex$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

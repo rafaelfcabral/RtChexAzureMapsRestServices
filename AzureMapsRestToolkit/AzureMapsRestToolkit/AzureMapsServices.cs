@@ -31,6 +31,8 @@ namespace AzureMapsToolkit
 
         private readonly string baseDomain;
 
+        private readonly JsonSerializerSettings serializerOptions;
+
 
         /// <summary>
         /// 
@@ -45,11 +47,10 @@ namespace AzureMapsToolkit
 
             this.baseDomain = baseDomain;
 
-            JsonConvert.DefaultSettings = () =>
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                };
+            serializerOptions = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
         #region Mobility
@@ -173,7 +174,7 @@ namespace AzureMapsToolkit
                     using (var responseMessage = response.Content)
                     {
                         var responseData = await responseMessage.ReadAsStringAsync();
-                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<PostPointInPolygonResponse>(responseData);
+                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<PostPointInPolygonResponse>(responseData, serializerOptions);
                         return new Response<PostPointInPolygonResponse> { Result = res };
                     }
                 }
@@ -204,7 +205,7 @@ namespace AzureMapsToolkit
                     using (var responseMessage = response.Content)
                     {
                         var responseData = await responseMessage.ReadAsStringAsync();
-                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<GeofenceResponse>(responseData);
+                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<GeofenceResponse>(responseData, serializerOptions);
                         return new Response<GeofenceResponse> { Result = res };
                     }
                 }
@@ -234,7 +235,7 @@ namespace AzureMapsToolkit
                     using (var responseMessage = response.Content)
                     {
                         var responseData = await responseMessage.ReadAsStringAsync();
-                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosestPointResponse>(responseData);
+                        var res = Newtonsoft.Json.JsonConvert.DeserializeObject<ClosestPointResponse>(responseData, serializerOptions);
                         return new Response<ClosestPointResponse> { Result = res };
                     }
                 }
@@ -439,7 +440,7 @@ namespace AzureMapsToolkit
                 // make another request and wait for the request is processed by the service
                 var udidUrl = $"{location}&subscription-key={this.Key}";
                 string udid = GetUdidFromLocation(udidUrl);
-                var uploadResult = Newtonsoft.Json.JsonConvert.DeserializeObject<UploadResult>(udid);
+                var uploadResult = Newtonsoft.Json.JsonConvert.DeserializeObject<UploadResult>(udid, serializerOptions);
                 return new Response<UploadResult> { Result = new UploadResult { Udid = uploadResult.Udid } };
 
             }
@@ -472,7 +473,7 @@ namespace AzureMapsToolkit
                 var location = res.Headers.GetValues("Location").First();
                 var udidUrl = $"{location}&subscription-key={this.Key}";
                 string sUdid = GetUdidFromLocation(udidUrl);
-                var updateResult = Newtonsoft.Json.JsonConvert.DeserializeObject<UploadResult>(sUdid);
+                var updateResult = Newtonsoft.Json.JsonConvert.DeserializeObject<UploadResult>(sUdid, serializerOptions);
                 return new Response<UpdateResult> { Result = new UpdateResult { Udid = updateResult.Udid } };
             }
             catch (AzureMapsException ex)
@@ -730,7 +731,7 @@ namespace AzureMapsToolkit
                     destinations = destinationsPoint
                 };
 
-                string data = Newtonsoft.Json.JsonConvert.SerializeObject(body);
+                string data = Newtonsoft.Json.JsonConvert.SerializeObject(body, serializerOptions);
 
                 using (var response = await GetHttpResponseMessage(url, data, HttpMethod.Post))
                 {
@@ -938,7 +939,7 @@ namespace AzureMapsToolkit
             {
                 var bodyContent = new { route = lineString };
 
-                var queryContent = Newtonsoft.Json.JsonConvert.SerializeObject(bodyContent);
+                var queryContent = Newtonsoft.Json.JsonConvert.SerializeObject(bodyContent, serializerOptions);
 
                 var args = GetQuery<SearchAlongRouteRequest>(req, true);
 
@@ -949,7 +950,7 @@ namespace AzureMapsToolkit
                     using (var data = responseMsg.Content)
                     {
                         var content = await data.ReadAsStringAsync();
-                        var response = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchAlongRouteResponse>(content);
+                        var response = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchAlongRouteResponse>(content, serializerOptions);
                         return Response<SearchAlongRouteResponse>.CreateResponse(response);
                     }
                 }
@@ -1002,7 +1003,7 @@ namespace AzureMapsToolkit
             {
                 var g = new { geometry = geoJson };
 
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(g);
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(g, serializerOptions);
 
                 var args = GetQuery<SearchInsidePolygonRequest>(request, false);
 
@@ -1013,7 +1014,7 @@ namespace AzureMapsToolkit
                     using (var data = responseMsg.Content)
                     {
                         var content = await data.ReadAsStringAsync();
-                        var response = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchGeometryResponse>(content);
+                        var response = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchGeometryResponse>(content, serializerOptions);
                         return Response<SearchGeometryResponse>.CreateResponse(response);
                     }
                 }
