@@ -31,9 +31,6 @@ namespace AzureMapsToolkit
 
         private readonly string baseDomain;
 
-        private readonly JsonSerializerSettings serializerOptions;
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -46,11 +43,6 @@ namespace AzureMapsToolkit
             }
 
             this.baseDomain = baseDomain;
-
-            serializerOptions = new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
         }
 
         #region Mobility

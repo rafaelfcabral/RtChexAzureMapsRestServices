@@ -17,9 +17,17 @@ namespace AzureMapsToolkit.Common
     public class BaseServices
     {
         internal string Key { get; set; }
+
+        protected readonly JsonSerializerSettings serializerOptions;
+
         public BaseServices(string key)
         {
             Key = key;
+
+            serializerOptions = new JsonSerializerSettings()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
         internal async Task<HttpResponseMessage> GetHttpResponseMessage(string url, string data, HttpMethod method)
@@ -212,7 +220,7 @@ namespace AzureMapsToolkit.Common
             }
 
 
-            var queryContent = Newtonsoft.Json.JsonConvert.SerializeObject(q);
+            var queryContent = Newtonsoft.Json.JsonConvert.SerializeObject(q, serializerOptions);
             return queryContent;
         }
 
@@ -243,14 +251,14 @@ namespace AzureMapsToolkit.Common
             if (res.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var json = res.Content.ReadAsStringAsync().Result;
-                var val = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+                var val = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json, serializerOptions);
                 return val;
             }
             else
             {
                 string content = res.Content.ReadAsStringAsync().Result;
 
-                var ex = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorResponse>(content);
+                var ex = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorResponse>(content, serializerOptions);
 
                 throw new AzureMapsException(ex);
             }
