@@ -97,7 +97,7 @@ namespace AzureMapsToolkit.Common
             }
         }
 
-        internal string GetQuery<T>(T request, bool includeApiVersion, bool includeLanguage = true, char firstChar = '&')
+        internal string GetQuery<T>(T request, bool includeApiVersion, bool includeLanguage = true, char firstChar = '&', bool toCamelCase = true)
             where T : RequestBase
         {
             Type type = request.GetType();
@@ -118,8 +118,10 @@ namespace AzureMapsToolkit.Common
                     if (propertyInfo?.PropertyType.IsEnum == true || underLayingtype?.IsEnum == true)
                     {
                         argumentName = Char.ToLower(propertyInfo.Name[0]) + propertyInfo.Name.Substring(1);
+                        argumentValue = propertyInfo.GetValue(request).ToString().Replace(" ", "");
 
-                        argumentValue = propertyInfo.GetValue(request).ToString().Replace(" ", "");  //.ToCamlCase();    
+                        if (toCamelCase)
+                            argumentValue = argumentValue.ToCamlCase();
                     }
                     //else if (propertyInfo != null && propertyInfo.PropertyType.IsArray)
                     //{
@@ -190,13 +192,13 @@ namespace AzureMapsToolkit.Common
             }
         }
 
-        internal async Task<Response<T>> ExecuteRequest<T, U>(string baseUrl, U req) where U : RequestBase
+        internal async Task<Response<T>> ExecuteRequest<T, U>(string baseUrl, U req, bool toCamelCase = true) where U : RequestBase
         {
             Url = string.Empty;
             try
             {
                 if (req != null)
-                    Url += GetQuery<U>(req, true);
+                    Url += GetQuery<U>(req, true, toCamelCase: toCamelCase);
 
                 using (var client = GetClient(baseUrl))
                 {
