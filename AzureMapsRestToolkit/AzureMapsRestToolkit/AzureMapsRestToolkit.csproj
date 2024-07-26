@@ -4,16 +4,17 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>.Net standard library for Azure Maps Services</Description>
-    <PackageProjectUrl>https://github.com/perfahlen/AzureMapsRestServices</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/rafaelfcabral/RtChexAzureMapsRestServices</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/perfahlen/AzureMapsRestServices/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/perfahlen/AzureMapsRestServices</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Azure Maps REST Toolkit</PackageTags>
-    <Version>6.0.0</Version>
-    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+    <Version>6.0.1</Version>
+    <AssemblyVersion>6.0.1.0</AssemblyVersion>
     <RootNamespace>AzureMapsToolkit</RootNamespace>
-    <FileVersion>6.0.0.0</FileVersion>
+    <FileVersion>6.0.1.0</FileVersion>
     <PackageId>RtChex$(AssemblyName)</PackageId>
+    <Copyright>Check https://github.com/perfahlen/AzureMapsRestServices/</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

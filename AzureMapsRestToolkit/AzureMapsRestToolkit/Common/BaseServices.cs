@@ -11,6 +11,7 @@ using AzureMapsToolkit.Spatial;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace AzureMapsToolkit.Common
 {
@@ -26,7 +27,9 @@ namespace AzureMapsToolkit.Common
 
             serializerOptions = new JsonSerializerSettings()
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = new List<JsonConverter>() { new StringEnumConverter(camelCaseText: true) }
             };
         }
 
